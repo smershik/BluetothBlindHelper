@@ -60,47 +60,20 @@ namespace BlindHelper
 		public partial class Id
 		{
 			
+			// aapt resource value: 0x7f050004
+			public const int Distance = 2131034116;
+			
+			// aapt resource value: 0x7f050003
+			public const int Start = 2131034115;
+			
 			// aapt resource value: 0x7f050001
 			public const int button1 = 2131034113;
 			
 			// aapt resource value: 0x7f050002
 			public const int button2 = 2131034114;
 			
-			// aapt resource value: 0x7f050004
-			public const int button3 = 2131034116;
-			
-			// aapt resource value: 0x7f050005
-			public const int button4 = 2131034117;
-			
-			// aapt resource value: 0x7f050006
-			public const int button5 = 2131034118;
-			
-			// aapt resource value: 0x7f050008
-			public const int button6 = 2131034120;
-			
-			// aapt resource value: 0x7f05000a
-			public const int seekBar1 = 2131034122;
-			
-			// aapt resource value: 0x7f05000b
-			public const int seekBar2 = 2131034123;
-			
-			// aapt resource value: 0x7f05000c
-			public const int seekBar3 = 2131034124;
-			
-			// aapt resource value: 0x7f05000d
-			public const int seekBar4 = 2131034125;
-			
 			// aapt resource value: 0x7f050000
 			public const int textView1 = 2131034112;
-			
-			// aapt resource value: 0x7f050003
-			public const int textView2 = 2131034115;
-			
-			// aapt resource value: 0x7f050007
-			public const int textView3 = 2131034119;
-			
-			// aapt resource value: 0x7f050009
-			public const int textView4 = 2131034121;
 			
 			static Id()
 			{
