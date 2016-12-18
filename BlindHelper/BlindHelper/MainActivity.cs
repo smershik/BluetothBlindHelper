@@ -23,7 +23,8 @@ namespace BlindHelper
         BluetoothDevice _device = null;
         byte[] buffer = Encoding.ASCII.GetBytes("e");
         byte[] result = new byte[4];
-        
+        Boolean isRun = false;
+        Button buttonStart;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -47,9 +48,7 @@ namespace BlindHelper
             TextView Distance = FindViewById<TextView>(Resource.Id.Distance);
 
 
-
-
-            buttonConnect.Click += async delegate
+        buttonConnect.Click += async delegate
             {
                 buttonConnect.Enabled = false;
                 BluetoothAdapter adapter = BluetoothAdapter.DefaultAdapter;
@@ -59,24 +58,25 @@ namespace BlindHelper
                 if (!adapter.IsEnabled)
                     throw new Exception("Bluetooth adapter is not enabled.");
 
-                adapter.StartDiscovery();
+        adapter.StartDiscovery();
 
 
                 _device = (from bd in adapter.BondedDevices
-                                          where bd.Name == "BLINDHELPER"
-                                          select bd).FirstOrDefault();
+                           where bd.Name == "BLINDHELPER"
+                           select bd).FirstOrDefault();
 
                 if (_device == null)
                     throw new Exception("Named device not found.");
 
-                _socket = _device.CreateRfcommSocketToServiceRecord(UUID.FromString("00001101-0000-1000-8000-00805f9b34fb"));
+        _socket = _device.CreateRfcommSocketToServiceRecord(UUID.FromString("00001101-0000-1000-8000-00805f9b34fb"));
                 await _socket.ConnectAsync();
-                buttonDisconnect.Enabled = true;
+        buttonDisconnect.Enabled = true;
                 buttonStart.Enabled = true;
 
             };
 
-            buttonDisconnect.Click += delegate {
+    buttonDisconnect.Click += delegate
+            {
 
                 try
                 {
@@ -97,44 +97,42 @@ namespace BlindHelper
                 catch { throw new Exception("not disconnected"); }
             };
 
+
             var sender = new Thread(() =>
             {
-                while (true)
+                while (isRun)
                 {
                     _socket.OutputStream.Write(buffer, 0, buffer.Length);
-                    Thread.Sleep(1000);
+                    RunOnUiThread(() =>
+                    {
+                        Array.Clear(result, 0, result.Length);
+                        _socket.InputStream.Read(result, 0, result.Length);
+                        Distance.Text = Encoding.ASCII.GetString(result);
+                    });
+                    Thread.Sleep(350);
                 }
-            }
-            );
+            });
+
+            
 
             buttonStart.Click += delegate
             {
 
-                sender.Start();
-                System.Threading.Timer timer = new System.Threading.Timer((object o) =>
-                {
-                    _socket.InputStream.Read(result, 0, result.Length);
-                    Distance.Text = Encoding.ASCII.GetString(result);
-                },null,0,1000);
-                
-                //_socket.OutputStream.Write(buffer, 0, buffer.Length);
-                //await _socket.InputStream.ReadAsync(result, 0, result.Length);
-                //Distance.Text = Encoding.ASCII.GetString(result);
-            }; 
+                    sender.Start();
+                    isRun = true;
+                    buttonStart.Enabled = false;
 
-                
+            };
 
-            }
 
-        public void StartSend()
-        {
-            while (true)
-            {
-                _socket.OutputStream.Write(buffer, 0, buffer.Length);
-                System.Threading.Thread.Sleep(500);
-            }
+
+
         }
 
+
+
+
+            
         
 
 
